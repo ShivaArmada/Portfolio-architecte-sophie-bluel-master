@@ -11,6 +11,7 @@
         rel="stylesheet">
     <meta name="description" content="">
     <link rel="stylesheet" href="./assets/style.css">
+    <link rel="stylesheet" href="./assets/login.css">
     <script src="../Backend/login.js" defer></script>
     <script src="../Backend/app.js" defer></script>
     <script src="../Backend/server.js" defer></script>
@@ -18,29 +19,35 @@
 
 <body>
     <header>
-        <a href="index.html">
+        <a href="index.html" class="lien">
             <h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
         </a>
         <nav class="nav">
             <ul class="list-nav">
                 <li>projets</li>
                 <li>contact</li>
-                <a href="login.html">
-                    <li class="login_btn">login</li>
+                <a href="login.html" class="lien">
+                    <li class="login_btn"><strong>login</strong></li>
                 </a>
                 <li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
             </ul>
         </nav>
     </header>
     <main>
-        <section id="introduction">
-            <article>
+        <section id="form-login">
+            <article class="form-article">
+                <span class="titre-log">
                 <h2>Log In</h2>
+            </span>
+            <div class="input-zone">
                 <input type="email" id="email">
-                <label for="email">E-mail</label>
+                <label for="email" class="email-mdp">E-mail</label>
+            </div>
+            <div class="input-zone">
                 <input type="password" id="password">
-                <label for="password">Mot de passe</label>
-                <input type="submit">
+                <label for="password" class="email-mdp">Mot de passe</label>
+            </div>
+                <input type="submit" value="Se connecter" id="input-log-submit">
                 <button><u>Mot de passe oublié</u></button>
     </main>
 
