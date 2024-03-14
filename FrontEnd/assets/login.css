@@ -1,10 +1,12 @@
 main {
     margin-bottom: 355px;
-    
+
 }
+
 #login_btn {
     font-weight: bold;
 }
+
 #form-login {
     display: flex;
     align-items: center;
@@ -28,7 +30,7 @@ main {
 .email-mdp {
     display: flex;
     justify-content: center;
-    flex-flow: column-reverse; 
+    flex-flow: column-reverse;
     margin-bottom: 1em;
 }
 
@@ -45,11 +47,12 @@ main {
     text-align: center;
     margin-bottom: 17px;
 }
+
 input[type="submit"],
-#form-login input[type=submit]{
+#form-login input[type=submit] {
     font-family: 'Syne';
     color: white;
-	background-color: #1D6154;
+    background-color: #1D6154;
     text-align: center;
     font-weight: 700;
     height: 39px;
@@ -61,11 +64,11 @@ input[type="submit"],
     display: flex;
     justify-content: center;
     align-self: center;
-    
-   
+
+
 }
+
 footer nav ul {
     display: flex;
     transform: translateX(200px)
-
 }

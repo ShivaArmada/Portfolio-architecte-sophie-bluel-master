@@ -8,8 +8,7 @@
     width: 120%;
     height: 30px;
     transform: translateX(-20%);
-    display: block
-align-items: center;
+    display: block align-items: center;
     justify-content: center;
 }
 
@@ -27,37 +26,41 @@ align-items: center;
     justify-content: center;
     align-self: center;
     align-items: center;
-    padding-top: 5px ;
+    padding-top: 5px;
 }
 
 
 header#h-prio {
     margin: 80px 0;
 }
+
 #portfolio {
     text-align: center;
     margin-top: 139px;
     margin-bottom: 92px;
 }
+
 .div-mid-projets {
     display: flex;
     justify-content: center;
     margin-top: 139px;
     margin-bottom: 92px;
 }
-#portfolio h2  {
+
+#portfolio h2 {
     padding-right: 31px;
     margin-bottom: 0;
 }
 
 #portfolio div p {
     display: flex;
-align-items: center;
-padding-left: 10.42px;
-padding-top: 10px;
-width: 58px;
-font-size: 14px;
+    align-items: center;
+    padding-left: 10.42px;
+    padding-top: 10px;
+    width: 58px;
+    font-size: 14px;
 }
+
 #portfolio div span {
     display: block;
     margin: 0;
