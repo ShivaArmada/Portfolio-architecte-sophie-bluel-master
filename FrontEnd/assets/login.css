@@ -1,3 +1,10 @@
+main {
+    margin-bottom: 355px;
+    
+}
+#login_btn {
+    font-weight: bold;
+}
 #form-login {
     display: flex;
     align-items: center;
@@ -56,4 +63,9 @@ input[type="submit"],
     align-self: center;
     
    
+}
+footer nav ul {
+    display: flex;
+    transform: translateX(200px)
+
 }
