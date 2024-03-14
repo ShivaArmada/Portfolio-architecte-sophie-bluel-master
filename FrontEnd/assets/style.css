@@ -352,3 +352,14 @@ footer nav ul {
 	justify-content: flex-end;
 	margin: 2em
 }
+
+/*
+footer nav ul {
+    display: flex;
+    transform: translateX(200px)
+}
+
+pour après script mettre les mentions légales au bon endroit
+*/
+
+/* faire attention remettre les descriptions d'image bien à gauche en flex start*/

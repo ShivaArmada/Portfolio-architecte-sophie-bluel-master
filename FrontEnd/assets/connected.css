@@ -8,7 +8,8 @@
     width: 120%;
     height: 30px;
     transform: translateX(-20%);
-    display: block align-items: center;
+    display: block;
+    align-items: center;
     justify-content: center;
 }
 
@@ -52,7 +53,7 @@ header#h-prio {
     margin-bottom: 0;
 }
 
-#portfolio div p {
+#portfolio .div-mid-projets p {
     display: flex;
     align-items: center;
     padding-left: 10.42px;
@@ -70,4 +71,10 @@ header#h-prio {
     font-weight: 700;
     margin-top: 10px;
     color: black;
+}
+
+figcaption {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
 }
