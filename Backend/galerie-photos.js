@@ -80,7 +80,5 @@ function initLogin() {
 }
 
 initAddEventListenerPopup();
-initLogin();
 
-// import qui permet de se connecter
-//   import { login as loginFunction } from "./login.js";
+
