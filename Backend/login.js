@@ -1,38 +1,53 @@
-   // Cette fonction permet d'initialiser le login en appuyant sur le bouton se connecter
-   function initLogin() {
-    let conect_Btn = document.getElementById("input-log-submit");
-    conect_Btn.addEventListener("click", () => {
-        
-        // URL à utiliser pour la requête Post/GET user-e-mdp
-    const url = 'http://localhost:5678/api/users/login';
+const API_URL = 'http://localhost:5678/api/users/login';
 
-    // Options de la requête Post
-    const options = {
-        method: 'POST',
-        headers: {
-            'Accept': 'application/json'
-        }
+async function loginAndStoreCookies(email, password) {
+  const response = await fetch(API_URL, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ email, password })
+  });
 
+  if (!response.ok) {
+    // Differentiate between authentication error and server error
+    if (response.status === 401) {
+      throw new Error('Authentication failed: Invalid email or password');
+    } else {
+      throw new Error('Server error: ' + response.status);
+    }
+  }
 
-    };
+  // Extract the cookies from the response headers
+  const cookies = response.headers.get('set-cookie');
 
+  // Store the cookies in the browser's session storage
+  sessionStorage.setItem('sessionCookies', cookies);
 
-
-
-      // Options de la requête GET
-      const options = {
-          method: 'GET',
-          headers: {
-              'Accept': 'application/json'
-          }
-
-
-      };
-       
-    })
+  return response.json();
 }
 
-   
-   
+document.getElementById('input-log-submit').addEventListener('click', async (event) => {
+  event.preventDefault();
 
+  // Use destructuring to get the values from the input fields
+  const { value: email } = document.getElementById('email');
+  const { value: password } = document.getElementById('password');
 
+  try {
+    const response = await loginAndStoreCookies(email, password);
+
+    if (response) {
+      // Redirect to the connected.html page
+      window.location.href = 'connected.html';
+    }
+  } catch (error) {
+    // Display an error message to the user
+    const errorMessage = document.getElementById('error-message');
+    errorMessage.textContent = 'Error logging in: ' + error.message;
+
+    // Add the 'bad' class to the 'email-mdp' element
+    const emailMdpElement = document.querySelector('.email-mdp');
+    emailMdpElement.classList.add('bad');
+  }
+});

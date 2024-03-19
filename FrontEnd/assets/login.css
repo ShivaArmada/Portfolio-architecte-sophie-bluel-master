@@ -72,3 +72,6 @@ footer nav ul {
     display: flex;
     transform: translateX(200px)
 }
+.bad {
+    border-color: red;
+  }
