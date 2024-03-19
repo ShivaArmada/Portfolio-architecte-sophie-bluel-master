@@ -72,6 +72,7 @@ footer nav ul {
     display: flex;
     transform: translateX(200px)
 }
-.bad {
-    border-color: red;
-  }
+#form-login input.bad {
+    border: 2px solid red;
+    box-shadow: 0 0 2px rgb(255, 0, 0); /* Ombre rouge de 2px */
+}

@@ -42,12 +42,10 @@ document.getElementById('input-log-submit').addEventListener('click', async (eve
       window.location.href = 'connected.html';
     }
   } catch (error) {
-    // Display an error message to the user
-    const errorMessage = document.getElementById('error-message');
-    errorMessage.textContent = 'Error logging in: ' + error.message;
-
-    // Add the 'bad' class to the 'email-mdp' element
-    const emailMdpElement = document.querySelector('.email-mdp');
-    emailMdpElement.classList.add('bad');
+    // Add the 'bad' class to the 'input-reaction' element
+    const inputElements = document.querySelectorAll('#form-login input');
+    inputElements.forEach(element => {
+      element.classList.add('bad');
+    });
   }
 });
