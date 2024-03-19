@@ -374,7 +374,10 @@ pour après script mettre les mentions légales au bon endroit, une fois le conn
 	width: 100%; /* Change to the desired width */
     height: 100%; /* Change to the desired height */
     position: fixed;
-    border-radius: 10px;
+	top: 0; /* Change to the desired position */
+	left: 0; /* Change to the desired position */
+	right: 0; /* Change to the desired position */
+	bottom: 0; /* Change to the desired position */
 	color: black;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 9997;
@@ -401,6 +404,7 @@ pour après script mettre les mentions légales au bon endroit, une fois le conn
 .popupBackground.active h3 {
 	display: flex;
 	justify-content: center;
+	align-items: top;
 	margin-top: 20px;
 	font-size: 24px;
 	font-weight: 700;

@@ -1,10 +1,12 @@
 
+
+
 /**
  * Cette fonction initialise les écouteurs d'événements qui concernent 
  * l'affichage de la popup. 
  */
 function initAddEventListenerPopup() {
-    // On écoute le click sur le bouton ".login_btn"
+    // On écoute le click sur le bouton ".modif"
     let modifBtns = document.querySelectorAll(".modif");
 
     // Ajoutez l'écouteur d'événements à chaque bouton
@@ -31,7 +33,7 @@ function afficherPopup() {
         closeBtn.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
         closeBtn.classList.add("close-icon");
         closeBtn.addEventListener("click", cacherPopup);
-        popupBackground.appendChild(closeBtn);
+        Gform.appendChild(closeBtn);
 
         let modifTitle = document.createElement("h3");
         modifTitle.textContent = "Galerie Photo";
@@ -39,7 +41,28 @@ function afficherPopup() {
         Gform.appendChild(modifTitle);
 
         // ici la galerie récupérer avec work
+// URL de l'API
+const url = 'http://localhost:5678/api/works';
 
+// Récupérer les données de l'API
+fetch(url)
+    .then(response => response.json())
+    .then(data => {
+        // Créer la galerie
+        let galerie = document.createElement("span");
+        galerie.classList.add("galerie");
+
+        // Parcourir les données et créer un élément img pour chaque image
+        data.forEach(item => {
+            let img = document.createElement("img");
+            img.src = item.imageUrl;
+            galerie.appendChild(img);
+        });
+
+        // Ajouter la galerie au formulaire
+        Gform.appendChild(galerie);
+    })
+    .catch(error => console.error('Error:', error));
         // ici le trait before du bouton ajouter une photo
 
         let ajout_Btn = document.createElement("input");
@@ -65,7 +88,7 @@ function afficherPopup() {
 }
 
 /**
- * Cette fonction cache la popup pour se connecter. 
+ * Cette fonction cache la popup. 
  */
 function cacherPopup() {
     let popupBackground = document.querySelector(".popupBackground")

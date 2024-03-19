@@ -78,3 +78,61 @@ figcaption {
     justify-content: flex-start;
     align-items: center;
 }
+.Gform{
+    position: absolute;
+    top: 50%px;
+    left: 405px;
+    right: 405px;
+    bottom: 50%;
+    width: 630px;
+    height: 688px;
+    
+
+}
+.galerie {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    
+   
+    gap: 10px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left: 105px;
+    margin-right: 105px;
+}
+.Gform .ajout_Btn::before {
+    /* Ajouter un trait avant le bouton */
+    content: "";
+    display: block;
+    border-top: 1px solid black;
+    margin-bottom: 10px;
+}
+.Gform .galerie img {
+    /* Ajuster la taille des images */
+   width: 76.86px;
+    height: 104.08px;
+    padding-right: 7.49px;
+}
+.ajout_Btn {
+    /* Ajouter un bouton */
+    border: 1px solid black;
+	padding: 5px 50px;
+	border-radius: 60px;
+	background-color: #1D6154;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	text-wrap: nowrap;
+	height: 50px;
+    position: relative;
+	font-family: 'Syne';
+	color: white;
+	text-align: center;
+	font-weight: 700;
+	font-size: 16px;
+	z-index: 1;
+    bottom: 0;
+    left: 50%;
+    right: 50%;
+}
