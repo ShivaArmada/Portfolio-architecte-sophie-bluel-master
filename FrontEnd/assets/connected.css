@@ -97,22 +97,48 @@ figcaption {
    
     gap: 10px;
     margin-top: 20px;
-    margin-bottom: 20px;
     margin-left: 105px;
-    margin-right: 105px;
+    margin-right: 90px;
 }
-.Gform .ajout_Btn::before {
-    /* Ajouter un trait avant le bouton */
+.Gform .galerie {
+    /* Ajouter une marge inférieure pour créer de l'espace entre la galerie et le trait */
+    margin-bottom: 4.5em;
+}
+
+.ajout_Btn_Wrapper::before {
     content: "";
     display: block;
-    border-top: 1px solid black;
-    margin-bottom: 10px;
+    border-top: 1px solid #B3B3B3;
+    margin-bottom: 38px;
+    width: 420px;
+    margin-left: 105px;
 }
+.Gform .galerie .image-container {
+    position: relative;
+    display: inline-block; /* pour que la taille du conteneur corresponde à celle de l'image */
+}
+
 .Gform .galerie img {
     /* Ajuster la taille des images */
-   width: 76.86px;
+    width: 76.86px;
     height: 104.08px;
-    padding-right: 7.49px;
+}
+
+.trash-icon-span {
+    position: absolute;
+    top: 6px;
+    right: 4.86px;
+    width: 17px;
+    height: 17px;
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.trash-icon-span i {
+ 
+    font-size: 11px;
 }
 .ajout_Btn {
     /* Ajouter un bouton */
@@ -121,18 +147,16 @@ figcaption {
 	border-radius: 60px;
 	background-color: #1D6154;
 	display: flex;
-	align-items: center;
-	gap: 10px;
-	text-wrap: nowrap;
-	height: 50px;
-    position: relative;
+	height: 40px;
+    width: 40%;
+    position: absolute;
 	font-family: 'Syne';
 	color: white;
 	text-align: center;
 	font-weight: 700;
 	font-size: 16px;
 	z-index: 1;
-    bottom: 0;
-    left: 50%;
+    bottom: 10%;
+    left: 30%;
     right: 50%;
 }

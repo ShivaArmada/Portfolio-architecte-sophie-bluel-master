@@ -372,8 +372,8 @@ pour après script mettre les mentions légales au bon endroit, une fois le conn
 .popupBackground.active {
     display: block;
 	width: 100%; /* Change to the desired width */
-    height: 100%; /* Change to the desired height */
-    position: fixed;
+    height: 4000px; /* Change to the desired height */
+    position: absolute;
 	top: 0; /* Change to the desired position */
 	left: 0; /* Change to the desired position */
 	right: 0; /* Change to the desired position */
@@ -405,7 +405,8 @@ pour après script mettre les mentions légales au bon endroit, une fois le conn
 	display: flex;
 	justify-content: center;
 	align-items: top;
-	margin-top: 20px;
+	margin-top: 60px;
+	margin-bottom: 46px;
 	font-size: 24px;
 	font-weight: 700;
 	color: black;
@@ -415,7 +416,7 @@ pour après script mettre les mentions légales au bon endroit, une fois le conn
 	width: 50%; /* Change to the desired width */
     height: 50%; /* Change to the desired height */
     position: fixed;
-    top: 25%; /* Change to the desired position */
+    top: 601px; /* Change to the desired position */
     right: 25%; /* Change to the desired position */
     left: 25%; /* Change to the desired position */
     color: white;
