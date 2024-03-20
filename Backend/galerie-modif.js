@@ -1,4 +1,8 @@
-import { getWorks } from './filtres-travaux.js';
+
+
+if (sessionStorage.getItem('sessionCookies') !== null) {
+    // sessionStorage est disponible
+    
 
 /**
  * Cette fonction initialise les écouteurs d'événements qui concernent 
@@ -149,6 +153,43 @@ function cacherPopup() {
 
 // afficher les travaux par rapport aux données reçues de l'api et non à l'html via innerhtml
 
+// fonction copiée de filtres-travaux.js comme l'import ne marche pas
+
+function getWorks() {
+    // URL à utiliser pour la requête GET travaux
+    const url = 'http://localhost:5678/api/works';
+
+    // Options de la requête GET
+    const options = {
+        method: 'GET',
+        headers: {
+            'Accept': 'application/json'
+        }
+    };
+
+    // Retourner la promesse de la réponse de la requête
+    return fetch(url, options)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('La requête a échoué avec le statut : ' + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            // Afficher les données dans la console
+            return data;
+        })
+        .catch(error => {
+            // En cas d'erreur, afficher un message d'erreur dans la console et rejeter la promesse
+            console.error('Une erreur est survenue lors de la requête :', error.message);
+            throw error;
+        });
+}
+
+getWorks().then(data => {
+    displaySelectedCategory(data)
+})
+
 let intervalId;
 
 function pollWorks() {
@@ -162,6 +203,9 @@ function pollWorks() {
             displaySelectedCategory(data);
         });
     }, 5000); // 5000 millisecondes = 5 secondes
+    setTimeout(() => {
+        clearInterval(intervalId);
+    }, 6000); // 6000 millisecondes = 6 secondes
 }
 
 // Ajouter l'écouteur d'événements à chaque élément de spanTrash
@@ -177,5 +221,10 @@ spanTrash.forEach(element => {
     });
 });
 
-initAddEventListenerPopup()
+
 pollWorks();
+initAddEventListenerPopup();
+} else {
+    // sessionStorage n'est pas disponible
+   prompt("Vous n'êtes pas connecté.");
+}

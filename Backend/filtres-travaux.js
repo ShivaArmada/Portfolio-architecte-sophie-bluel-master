@@ -110,5 +110,3 @@ getWorks().then(data => {
     displaySelectedCategory(data)
 })
 
-// Exportation de la fonction
-export { getWorks };
