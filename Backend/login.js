@@ -23,7 +23,7 @@ async function loginAndStoreCookies(email, password) {
 
   // Store the cookies in the browser's session storage
   sessionStorage.setItem('sessionCookies', cookies);
-
+  
   return response.json();
 }
 
