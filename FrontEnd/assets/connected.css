@@ -86,8 +86,15 @@ figcaption {
     bottom: 50%;
     width: 630px;
     height: 688px;
-    
-
+}
+.GformNew{
+    position: absolute;
+    top: 50%px;
+    left: 405px;
+    right: 405px;
+    bottom: 50%;
+    width: 630px;
+    height: 688px;
 }
 .galerie {
     display: flex;
@@ -105,14 +112,8 @@ figcaption {
     margin-bottom: 4.5em;
 }
 
-.ajout_Btn_Wrapper::before {
-    content: "";
-    display: block;
-    border-top: 1px solid #B3B3B3;
-    margin-bottom: 38px;
-    width: 420px;
-    margin-left: 105px;
-}
+
+
 .Gform .galerie .image-container {
     position: relative;
     display: inline-block; /* pour que la taille du conteneur corresponde à celle de l'image */
@@ -160,3 +161,52 @@ figcaption {
     left: 30%;
     right: 50%;
 }
+.ajout_Btn_Wrapper::before {
+    content: "";
+    display: block;
+    border-top: 1px solid #B3B3B3;
+    margin-bottom: 38px;
+    width: 420px;
+    margin-left: 105px;
+}
+.sub_Wrapper::before {
+    content: "";
+    display: block;
+    border-top: 1px solid #B3B3B3;
+    margin-bottom: 38px;
+    width: 420px;
+    margin-left: 105px;
+}
+.submit-btn-new {
+    /* Ajouter un bouton */
+    border: 1px solid black;
+	padding: 5px 50px;
+	border-radius: 60px;
+	background-color: #1D6154;
+	display: flex;
+	height: 40px;
+    width: 40%;
+    position: absolute;
+	font-family: 'Syne';
+	color: white;
+	justify-content: center;
+	font-weight: 700;
+	font-size: 16px;
+	z-index: 1;
+    bottom: 10%;
+    left: 30%;
+    right: 50%;
+}
+.input-zone {
+    display: flex;
+    flex-direction: column;
+
+
+}
+.input-reaction {
+    height: 50px;
+    font-size: 1.2em;
+    border: none;
+    box-shadow: 0px 4px 14px rgba(0, 0, 0, 0.09);
+    margin-bottom: 20px;
+    width: 379px;}
