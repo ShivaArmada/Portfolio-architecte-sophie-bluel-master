@@ -34,6 +34,16 @@ function afficherPopupNew() {
         closeBtnNew.addEventListener("click", cacherPopupNew);
         GformNew.appendChild(closeBtnNew);
 
+
+        let returnBtn = document.createElement("span");
+        returnBtn.innerHTML = `<i class="fa-solid fa-arrow-left"></i>`;
+        returnBtn.classList.add("return-icon");
+        returnBtn.addEventListener("click", function () {
+            cacherPopupNew();
+            afficherPopup();
+        });
+        GformNew.appendChild(returnBtn);
+
         let modifTitleNew = document.createElement("h3");
         modifTitleNew.textContent = "Ajout Photo";
         modifTitleNew.classList.add("modif-title");
@@ -41,7 +51,49 @@ function afficherPopupNew() {
 
         let cadreDivNew = document.createElement("div");
         cadreDivNew.classList.add("cadre-div");
+
+        let inputFileNew = document.createElement("input");
+        inputFileNew.setAttribute("type", "file");
+        inputFileNew.setAttribute("accept", "image/png, image/jpeg");
+        inputFileNew.classList.add("input-file");
+        inputFileNew.style.display = "none"; // Cacher l'input
+        cadreDivNew.appendChild(inputFileNew);
+
+        // Ajouter un écouteur d'événements pour déclencher le clic sur l'input lorsque la div est cliquée
+        cadreDivNew.addEventListener("click", function () {
+            inputFileNew.click();
+        });
+
         GformNew.appendChild(cadreDivNew);
+
+        function updateVisualisation() {
+            const preview_square = document.querySelector("cadre-div")[0];
+            const imgInput = document.querySelector("input-file");
+
+            if (imgInput.files && imgInput.files[0]) {
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    const imageUrl = e.target.result;
+                    const imageElement = `<img src="${imageUrl}" loading="lazy" decoding="async">`;
+
+                    preview_square.innerHTML = imageElement;
+                };
+
+                // Lire le fichier en tant que données URL
+                reader.readAsDataURL(imgInput.files[0]);
+            } else {
+                const imageElement = `<img src="./media/aucune-image.png" loading="lazy" decoding="async">`;
+
+                preview_square.innerHTML = imageElement;
+            }
+        }
+
+        // Ajouter un écouteur d'événements à l'input pour appeler updateVisualisation lorsque l'utilisateur sélectionne un fichier
+        const inputFile = document.getElementsByClassName("input-file")[0];
+        inputFile.addEventListener("change", updateVisualisation);
+
+
 
         let spanLogoNew = document.createElement("span");
         spanLogoNew.innerHTML = `<i class="fa-solid fa-image"></i>`;
@@ -59,39 +111,40 @@ function afficherPopupNew() {
 
         let divInputZone1 = document.createElement("div");
         divInputZone1.classList.add("input-zone");
-        
+
         let inputTitleNew = document.createElement("input");
         inputTitleNew.setAttribute("type", "text");
         inputTitleNew.setAttribute("id", "title-zone-ajout"); // Utilisez "title-zone-ajout" comme ID pour éviter toute confrontation
         inputTitleNew.classList.add("input-reaction");
         divInputZone1.appendChild(inputTitleNew);
-        
+
         let labelTitleNew = document.createElement("label");
-        labelTitleNew.setAttribute("for", "title-zone-ajout"); // Assurez-vous que l'attribut for correspond au nouvel ID de l'élément d'entrée
+        labelTitleNew.setAttribute("for", "title-zone-ajout");
+        labelTitleNew.textContent = "Titre" // Assurez-vous que l'attribut for correspond au nouvel ID de l'élément d'entrée
         divInputZone1.insertBefore(labelTitleNew, inputTitleNew);
-        
+
         GformNew.appendChild(divInputZone1);
 
         let divInputZone2 = document.createElement("div");
         divInputZone2.classList.add("input-zone");
-        
+
         let selectCategoryNew = document.createElement("select");
         selectCategoryNew.setAttribute("name", "category");
         selectCategoryNew.setAttribute("id", "category");
         selectCategoryNew.classList.add("input-reaction");
         divInputZone2.appendChild(selectCategoryNew);
-        
+
         let defaultOption = document.createElement("option");
         defaultOption.textContent = ""; // Texte de l'option par défaut
         defaultOption.setAttribute("disabled", ""); // Désactive l'option par défaut
         defaultOption.setAttribute("selected", ""); // Sélectionne l'option par défaut
         selectCategoryNew.appendChild(defaultOption); // Ajoute l'option par défaut au select
-        
+
         let labelCategoryNew = document.createElement("label");
         labelCategoryNew.setAttribute("for", "category");
-        labelCategoryNew.textContent = "Category";
+        labelCategoryNew.textContent = "Categorie";
         divInputZone2.insertBefore(labelCategoryNew, selectCategoryNew);
-        
+
         GformNew.appendChild(divInputZone2);
 
         // Fetch categories from the API
@@ -116,15 +169,15 @@ function afficherPopupNew() {
                     selectCategoryNew.add(optionNew);
                 });
 
-                GformNew.appendChild(selectCategoryNew);
+                divInputZone2.appendChild(selectCategoryNew);
             })
             .catch(error => {
                 console.error('Une erreur est survenue lors de la requête :', error.message);
                 throw error;
             });
 
-            let submitBtnNewWrapper = document.createElement("div");
-            submitBtnNewWrapper.classList.add("sub_Wrapper");
+        let submitBtnNewWrapper = document.createElement("div");
+        submitBtnNewWrapper.classList.add("sub_Wrapper");
 
         let submitBtnNew = document.createElement("input");
         submitBtnNew.setAttribute("type", "submit");
@@ -133,7 +186,7 @@ function afficherPopupNew() {
         GformNew.appendChild(submitBtnNew);
 
         submitBtnNewWrapper.appendChild(submitBtnNew);
-                    GformNew.appendChild(submitBtnNewWrapper);
+        GformNew.appendChild(submitBtnNewWrapper);
 
         popupBackgroundNew.addEventListener("click", (event) => {
             if (event.target === popupBackgroundNew) {
