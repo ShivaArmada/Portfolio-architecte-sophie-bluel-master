@@ -1,5 +1,6 @@
 
 
+
 if (sessionStorage.getItem('sessionCookies') !== null) {
     // sessionStorage est disponible
 
@@ -72,6 +73,23 @@ if (sessionStorage.getItem('sessionCookies') !== null) {
                         galerie.appendChild(div);
                     });
 
+                    function transitionPopupOld() {
+                        let ajout_Btn = document.querySelector(".ajout_Btn");
+                        let ajout_Btn_Wrapper = document.querySelector(".ajout_Btn_Wrapper");
+                    
+                        ajout_Btn.addEventListener("click", function (event) {
+                            event.preventDefault();
+                            cacherPopup();                  
+                        });
+                    
+                        ajout_Btn_Wrapper.addEventListener("click", function (event) {
+                            event.preventDefault();
+                            cacherPopup();                
+                        });
+                    }
+
+                   ;
+
                     // Ajouter la galerie au formulaire
                     Gform.appendChild(galerie);
 
@@ -87,22 +105,25 @@ if (sessionStorage.getItem('sessionCookies') !== null) {
                         // Add event listener to span element
                         spanTrash.addEventListener("click", function () {
                             // Check if token/cookie JSON exists in SessionStorage.json
-                            if (sessionStorage.getItem("sessionCookies")) {
+                            if (SessionStorage.JSON.getItem("sessionCookies")) {
+                                // Get the token/cookie JSON from SessionStorage.json
                                 // Execute the script here
                                 let workId = this.dataset.workId; // Get the work ID from the span element
 
                                 fetch(`http://localhost:5678/api/works/${workId}`, {
                                     method: 'DELETE',
+                                    headers: {
+                                        'Authorization': `Bearer ${JSON.parse(SessionStorage.JSON.getItem("sessionCookies")).token}`,
+                                    }
                                 })
                                     .then(response => response.json())
                                     .then(data => console.log(data))
-                                    .catch((error) => {
+                                    .catch(error => {
                                         console.error('Error:', error);
                                         prompt("Une erreur s'est produite lors de la suppression du travail. Veuillez réessayer.");
                                     });
-
                             } else {
-                                alert("Vous n'avez pas l'autorisation de supprimer ce travail.");
+                                console.log("Vous n'avez pas l'autorisation de supprimer ce travail.");
                             }
                         });
                     });
@@ -118,8 +139,14 @@ if (sessionStorage.getItem('sessionCookies') !== null) {
 
                     ajout_Btn_Wrapper.appendChild(ajout_Btn);
                     Gform.appendChild(ajout_Btn_Wrapper);
+                    transitionPopupOld();
+                  
                 })
                 .catch(error => console.error('Error:', error));
+
+                
+                
+                
 
             // On écoute le click sur la div "popupBackground"
             popupBackground.addEventListener("click", (event) => {
@@ -154,7 +181,7 @@ if (sessionStorage.getItem('sessionCookies') !== null) {
     // afficher les travaux par rapport aux données reçues de l'api et non à l'html via innerhtml
     function displaySelectedCategory(data) {
         document.getElementsByClassName("gallery")[0].innerHTML = "";
-    
+
         data.forEach(item => {
             document.getElementsByClassName("gallery")[0].innerHTML += `
                     <figure>
@@ -233,13 +260,31 @@ if (sessionStorage.getItem('sessionCookies') !== null) {
             });
         });
     }
+    function logout(event) {
+        // Prevent the default action of the link
+        event.preventDefault();
+
+        // Remove the token and userId from the browser's session storage
+        sessionStorage.removeItem('sessionToken');
+        sessionStorage.removeItem('userId');
+
+        // Redirect to the login.html page
+        window.location.href = 'login.html';
+    }
+
+    // Add event listener to logout button
+    document.querySelector('.logout_btn').addEventListener('click', logout);
 
 
     initAddEventListenerPopup();
     getWorks().then(data => {
         displaySelectedCategory(data)
-    });// afficher les travaux
+    });
+     
+
 } else {
     // sessionStorage n'est pas disponible
     prompt("Vous n'êtes pas connecté.");
 }
+
+
