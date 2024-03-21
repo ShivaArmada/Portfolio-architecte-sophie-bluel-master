@@ -73,22 +73,25 @@ if (sessionStorage.getItem('sessionCookies') !== null) {
                         galerie.appendChild(div);
                     });
 
+                    
                     function transitionPopupOld() {
                         let ajout_Btn = document.querySelector(".ajout_Btn");
                         let ajout_Btn_Wrapper = document.querySelector(".ajout_Btn_Wrapper");
                     
                         ajout_Btn.addEventListener("click", function (event) {
                             event.preventDefault();
-                            cacherPopup();                  
+                            cacherPopup();  
+                            afficherPopupNew();                
                         });
                     
                         ajout_Btn_Wrapper.addEventListener("click", function (event) {
                             event.preventDefault();
-                            cacherPopup();                
+                            cacherPopup();
+                            afficherPopupNew(); 
                         });
                     }
 
-                   ;
+                   
 
                     // Ajouter la galerie au formulaire
                     Gform.appendChild(galerie);
