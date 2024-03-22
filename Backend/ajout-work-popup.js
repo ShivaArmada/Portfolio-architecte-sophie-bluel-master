@@ -54,6 +54,7 @@ function afficherPopupNew() {
 
         let inputFileNew = document.createElement("input");
         inputFileNew.setAttribute("type", "file");
+        inputFileNew.setAttribute("id", "images_du_bien");
         inputFileNew.setAttribute("accept", "image/png, image/jpeg");
         inputFileNew.classList.add("input-file");
         inputFileNew.style.display = "none"; // Cacher l'input
@@ -67,15 +68,15 @@ function afficherPopupNew() {
         GformNew.appendChild(cadreDivNew);
 
         function updateVisualisation() {
-            const preview_square = document.querySelector("cadre-div")[0];
-            const imgInput = document.querySelector("input-file");
+            const preview_square = document.getElementsByClassName("cadre-div")[0];
+            const imgInput = document.getElementById("images_du_bien");
 
             if (imgInput.files && imgInput.files[0]) {
                 const reader = new FileReader();
 
                 reader.onload = function (e) {
                     const imageUrl = e.target.result;
-                    const imageElement = `<img src="${imageUrl}" loading="lazy" decoding="async">`;
+                    const imageElement = `<img src="${imageUrl}" loading="lazy" decoding="async" style="max-width:210px; max-height:160px;">`;
 
                     preview_square.innerHTML = imageElement;
                 };
@@ -83,7 +84,7 @@ function afficherPopupNew() {
                 // Lire le fichier en tant que données URL
                 reader.readAsDataURL(imgInput.files[0]);
             } else {
-                const imageElement = `<img src="./media/aucune-image.png" loading="lazy" decoding="async">`;
+                const imageElement = `<img src="./media/aucune-image.png" loading="lazy" decoding="async style="max-width:210px; max-height:160px;"">`;
 
                 preview_square.innerHTML = imageElement;
             }
