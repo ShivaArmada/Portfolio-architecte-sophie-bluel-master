@@ -25,7 +25,7 @@ async function loginAndStoreCookies(email, password) {
   sessionStorage.setItem('sessionCookies', cookies);
   
   return response.json();
-}
+ }
 
 document.getElementById('input-log-submit').addEventListener('click', async (event) => {
   event.preventDefault();
@@ -49,3 +49,4 @@ document.getElementById('input-log-submit').addEventListener('click', async (eve
     });
   }
 });
+

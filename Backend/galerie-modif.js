@@ -4,6 +4,11 @@
 if (sessionStorage.getItem('sessionCookies') !== null) {
     // sessionStorage est disponible
 
+//on affiche le cookies dans la console
+console.log('Dans la condition :', sessionStorage.getItem('sessionCookies'));
+    // Utilisez sessionCookies ici
+    const cookies = response.headers.get('set-cookie');
+    console.log('Dans la condition :', sessionStorage.getItem('sessionCookies', cookies));
 
     /**
      * Cette fonction initialise les écouteurs d'événements qui concernent 
