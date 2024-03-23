@@ -1,14 +1,8 @@
 
 
 
-if (sessionStorage.getItem('sessionCookies') !== null) {
+if (sessionStorage.getItem('token') !== null) {
     // sessionStorage est disponible
-
-//on affiche le cookies dans la console
-console.log('Dans la condition :', sessionStorage.getItem('sessionCookies'));
-    // Utilisez sessionCookies ici
-    const cookies = response.headers.get('set-cookie');
-    console.log('Dans la condition :', sessionStorage.getItem('sessionCookies', cookies));
 
     /**
      * Cette fonction initialise les écouteurs d'événements qui concernent 
@@ -113,7 +107,7 @@ console.log('Dans la condition :', sessionStorage.getItem('sessionCookies'));
                         // Add event listener to span element
                         spanTrash.addEventListener("click", function () {
                             // Check if token/cookie JSON exists in SessionStorage.json
-                            if (SessionStorage.JSON.getItem("sessionCookies")) {
+                            if (sessionStorage.getItem('token')) {
                                 // Get the token/cookie JSON from SessionStorage.json
                                 // Execute the script here
                                 let workId = this.dataset.workId; // Get the work ID from the span element
@@ -121,11 +115,11 @@ console.log('Dans la condition :', sessionStorage.getItem('sessionCookies'));
                                 fetch(`http://localhost:5678/api/works/${workId}`, {
                                     method: 'DELETE',
                                     headers: {
-                                        'Authorization': `Bearer ${JSON.parse(SessionStorage.JSON.getItem("sessionCookies")).token}`,
+                                        'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
                                     }
                                 })
-                                    .then(response => response.json())
-                                    .then(data => console.log(data))
+                                    .then(response =>console.log(response))
+                                    
                                     .catch(error => {
                                         console.error('Error:', error);
                                         prompt("Une erreur s'est produite lors de la suppression du travail. Veuillez réessayer.");
@@ -273,9 +267,8 @@ console.log('Dans la condition :', sessionStorage.getItem('sessionCookies'));
         event.preventDefault();
 
         // Remove the token and userId from the browser's session storage
-        sessionStorage.removeItem('sessionToken');
-        sessionStorage.removeItem('userId');
-
+        sessionStorage.removeItem('token');
+        
         // Redirect to the login.html page
         window.location.href = 'login.html';
     }
