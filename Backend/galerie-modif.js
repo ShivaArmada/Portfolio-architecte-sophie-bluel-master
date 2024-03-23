@@ -292,7 +292,7 @@ console.log('Dans la condition :', sessionStorage.getItem('sessionCookies'));
 
 } else {
     // sessionStorage n'est pas disponible
-    prompt("Vous n'êtes pas connecté.");
+    alert("Vous n'êtes pas connecté.");
 }
 
 
