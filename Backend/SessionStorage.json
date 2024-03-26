@@ -1,5 +1,0 @@
-{
-    "doc": "pour contenir les token de connexion"
-
-TOKEN_FILE = "token.json"
-}

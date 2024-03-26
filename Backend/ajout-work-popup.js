@@ -76,7 +76,7 @@ function afficherPopupNew() {
 
                 reader.onload = function (e) {
                     const imageUrl = e.target.result;
-                    const imageElement = `<img src="${imageUrl}" loading="lazy" decoding="async" style="max-width:210px; max-height:160px;">`;
+                    const imageElement = `<img src="${imageUrl}" loading="lazy" decoding="async" style="max-width:210px; max-height:170px;">`;
 
                     preview_square.innerHTML = imageElement;
                 };
@@ -188,6 +188,82 @@ function afficherPopupNew() {
 
         submitBtnNewWrapper.appendChild(submitBtnNew);
         GformNew.appendChild(submitBtnNewWrapper);
+
+        // fonction à appelé après pour affiché le travail mis à jour
+        function pollWorks() {
+            // Appeler getWorks() immédiatement, puis à intervalles réguliers
+            getWorks().then(data => {
+                displaySelectedCategory(data);
+            });
+    
+            intervalId = setInterval(() => {
+                getWorks().then(data => {
+                    displaySelectedCategory(data);
+                });
+            }, 5000); // 5000 millisecondes = 5 secondes
+    
+            setTimeout(() => {
+                clearInterval(intervalId);
+            }, 6000); // 6000 millisecondes = 6 secondes
+    
+            // Ajouter l'écouteur d'événements à chaque élément de subBtnNewV
+            let subBtnNewV = document.querySelectorAll(".submit-btn-new");
+            subBtnNewV.forEach(element => {
+                element.addEventListener("click", function () {
+                    // Si un polling est déjà en cours, l'arrêter
+                    if (intervalId) {
+                        clearInterval(intervalId);
+                    }
+    
+                    // Commencer un nouveau polling
+                    pollWorks();
+                });
+            });
+        }
+
+        GformNew.addEventListener("submit", async function (event) {
+            event.preventDefault(); // Empêche le comportement par défaut du navigateur lors de la soumission du formulaire
+        
+            // Récupérer les valeurs des champs d'entrée
+            const file = document.getElementById('images_du_bien').files[0];
+            const title = document.getElementById('title-zone-ajout').value;
+            const category = document.querySelector('select').value;
+        
+            // Convertir le fichier du preview en une chaîne JSON
+            const reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = function () {
+                const base64data = reader.result;
+                
+                // Envoyer la requête fetch
+                fetch('http://localhost:5678/api/works', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer ' + sessionStorage.getItem('token')
+                    },
+                    body: JSON.stringify({
+                        title: title,
+                        category: category,
+                        image: base64data
+                    })
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('La requête a échoué avec le statut : ' + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Travail ajouté avec succès :', data);
+                        pollWorks();
+                    })
+                    .catch(error => {
+                        console.error('Une erreur est survenue lors de la requête :', error.message);
+                        throw error;
+                    });
+            }
+        });
 
         popupBackgroundNew.addEventListener("click", (event) => {
             if (event.target === popupBackgroundNew) {
