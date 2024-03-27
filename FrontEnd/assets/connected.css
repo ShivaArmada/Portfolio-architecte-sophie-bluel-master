@@ -238,3 +238,6 @@ figcaption {
     .cadre-div * {
         color:  rgba(180, 180, 200, 1);;
     }
+    .bad {
+        border-color: red;
+    }
