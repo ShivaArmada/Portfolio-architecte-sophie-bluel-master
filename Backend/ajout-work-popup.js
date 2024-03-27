@@ -99,11 +99,12 @@ function afficherPopupNew() {
 
                 // Lire le fichier en tant que données URL
                 reader.readAsDataURL(imageFile);
-
+                console.log('formData :', imageFile);
             } else {
                 const imageElement = `<i class="fa-regular fa-circle-xmark"></i> style="font-size: 2rem; color: black;"`;
 
                 preview_square.innerHTML = imageElement;
+                
             }
         }
        
@@ -239,56 +240,71 @@ function afficherPopupNew() {
 
         GformNew.addEventListener("submit", async function (event) {
             event.preventDefault(); // Empêche le comportement par défaut du navigateur lors de la soumission du formulaire
-
+        
             // Récupérer les valeurs des champs d'entrée
             const title = document.getElementById('title-zone-ajout').value;
             const categoryId = selectCategoryNew.value;
-            
-
-
-
-           
-
-           // Créer un objet FormData et y ajouter les valeurs
-const formData = new FormData();
-formData.append('title', title);
-formData.append('categoryId', categoryId);
-formData.append('imageURL', imageFile); // Ajoutez le fichier d'image          
-console.log('formData :', inputFileNew.files[0]);
-
-            // Envoyer la requête fetch
-
-            fetch('http://localhost:5678/api/works', {
-                method: 'POST',
-                headers: {
-                    'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
-                    'Accept': 'application/json',
-                },
-                body: formData
-            })
+        
+            // Fetch the image from the URL
+            const imageUrl = document.querySelector('.cadre-div img').src;
+        
+            fetch(imageUrl)
+                .then(response => response.blob())
+                .then(imageBlob => {
+                    // Créer un objet FormData et y ajouter les valeurs
+                    const formData = new FormData();
+                    formData.append('title', title);
+                    formData.append('categoryId', categoryId);
+                    formData.append('image', imageBlob, 'image.png'); // Ajoutez le fichier d'image
+        
+                    console.log('title', title);  
+                    console.log('categoryId', categoryId);
+                    console.log('imageURL :', imageUrl);
+        
+                    // Envoyer la requête fetch
+                    return fetch('http://localhost:5678/api/works', {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                            'Accept': 'multipart/form-data',
+                        },
+                        body: formData
+                    });
+                })
                 .then(response => {
                     if (!response.ok) {
                         // Select the input elements
                         const inputs = document.querySelectorAll('input.input-reaction, select.input-reaction');
-
+        
                         // Add the 'bad' class to each input element
                         inputs.forEach(input => {
                             input.classList.add('bad');
                         });
-
+        
                         throw new Error('La requête a échoué avec le statut : ' + response.status);
                     }
                     return response.json();
                 })
                 .then(data => {
                     console.log('Travail ajouté avec succès :', data);
-                    pollWorks();
+                    pollWorks();                  
                     cacherPopupNew();
+                })
+                .then(() => {
+                    // Reset the form
+                    GformNew.reset();
+                })
+                .then(() => {
+                    // Reset the visualisation
+                    updateVisualisation();
+                })
+                .then(data => {
+                    // Display the selected category
+                    displaySelectedCategory(data);
                 })
                 .catch(error => {
                     console.error('Une erreur est survenue lors de la requête :', error.message);
                     throw error;
-
                 });
         });
 
