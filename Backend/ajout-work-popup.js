@@ -71,50 +71,8 @@ function afficherPopupNew() {
         GformNew.appendChild(cadreDivNew);
 
 
-        const FormPost = new FormData();
-        let imagePromise;
-        let imgInput;
-        let updateVisualisation = function () {
-            return new Promise((resolve, reject) => {
-                const preview_square = document.getElementsByClassName("cadre-div")[0];
-                imgInput = document.getElementById("images_du_bien");
 
-                if (imgInput.files && imgInput.files[0]) {
-                    let imageFile = imgInput.files[0]; // Assign the file to imageFile
 
-                    const reader = new FileReader();
-
-                    reader.onload = function (e) {
-                        imageUrl = e.target.result;
-                        const imageElement = `<img src="${imageUrl}" loading="lazy" class="imageElement" decoding="async" style="max-width:210px; max-height:170px;">`;
-
-                        preview_square.innerHTML = imageElement;
-                        resolve(imageFile); // Resolve the promise with imgInput.files[0]
-                    };
-
-                    // Read the file as URL data
-                    reader.readAsDataURL(imageFile);
-
-              
-                } else {
-                    const imageElement = `<i class="fa-regular fa-circle-xmark"></i> style="font-size: 2rem; color: black;"`;
-
-                    preview_square.innerHTML = imageElement;
-                    reject('No image file selected');
-                }
-            });
-        }
-
-        // Add an event listener to the input to call updateVisualisation when the user selects a file
-        const imageInputListener = document.getElementsByClassName("image-input")[0];
-        imageInputListener.addEventListener("change", function () {
-            console.log('Image selected'); // Add this line
-            imagePromise = updateVisualisation();
-            imagePromise.then(imageFile => {
-                console.log('imageFile', imageFile);
-            });
-        });
-      
 
 
         let spanLogoNew = document.createElement("span");
@@ -228,50 +186,88 @@ function afficherPopupNew() {
         GformNew.appendChild(submitBtnNewWrapper);
 
 
-        console.log('imagePromise', imagePromise); 
 
-        Promise.all([titlePromise, categoryPromise, imagePromise]).then(([title, categoryId, imageFile]) => {
-            let FormPost = new FormData();
+        let FormPost = new FormData();
+
+let imgInput;
+        let updateVisualisation = function () {
+            const preview_square = document.getElementsByClassName("cadre-div")[0];
+            imgInput = document.getElementById("images_du_bien");
+
+            if (imgInput.files && imgInput.files[0]) {
+                let imageFile = imgInput.files[0]; // Assign the file to imageFile
+
+                const reader = new FileReader();
+
+                reader.onload = function (e) {
+                    imageUrl = e.target.result;
+
+                    const imageElement = `<img src="${imageUrl}" loading="lazy" class="imageElement" decoding="async" style="max-width:210px; max-height:170px;">`;
+
+                    preview_square.innerHTML = imageElement;
+                };
+
+                // Read the file as URL data
+                reader.readAsDataURL(imageFile);
+
+                return imageFile;
+            } else {
+                const imageElement = `<i class="fa-regular fa-circle-xmark"></i> style="font-size: 2rem; color: black;"`;
+
+                preview_square.innerHTML = imageElement;
+                console.error('No image file selected');
+                return null;
+            }
+        }
+
+        // Add an event listener to the input to call updateVisualisation when the user selects a file
+        const imageInputListener = document.getElementsByClassName("image-input")[0];
+        imageInputListener.addEventListener("change", function () {
+            updateVisualisation();
+
+        });
+
+        GformNew.addEventListener("submit", async function (event) {
+            event.preventDefault(); // Empêche le comportement par défaut du navigateur lors de la soumission du formulaire
+
+            // Créer un objet FormData et y ajouter les valeurs
+            const [title, categoryId] = await Promise.all([titlePromise, categoryPromise])
             FormPost.append('title', title);
             FormPost.append('categoryId', categoryId);
-            FormPost.append('image', imageFile);
-            console.log('FormPost', FormPost);
 
-            GformNew.addEventListener("submit", async function (event) {
-                event.preventDefault(); // Empêche le comportement par défaut du navigateur lors de la soumission du formulaire
+     // Ajouter imageInputListener.files[0] à FormPost
+     if (imageInputListener && imageInputListener.files && imageInputListener.files[0]) {
+        FormPost.append('imageUrl', imageInputListener.files[0]);
+    }
 
-                // Créer un objet FormData et y ajouter les valeurs
-
-
-
-
+            console.log(FormPost.get('title'));
+            console.log(FormPost.get('categoryId'));
+            console.log(FormPost.get('imageUrl'));
 
 
-
-
-                // Envoyer la requête fetch
-                fetch('http://localhost:5678/api/works', {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
-                    },
-                    body: FormPost
+            // Envoyer la requête fetch
+            fetch('http://localhost:5678/api/works', {
+                method: 'POST',
+                headers: {
+                    'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                },
+                body: FormPost
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('La requête a échoué avec le statut : ' + response.status);
+                    }
+                    return response.json();
                 })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('La requête a échoué avec le statut : ' + response.status);
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log('Travail ajouté avec succès :', data);
-                    })
-                    .catch(error => {
-                        console.error(error);
-                    });
-            });
+                .then(data => {
+                    console.log('Travail ajouté avec succès :', data);
+                })
+                .catch(error => {
+                    console.error(error);
+                });
         });
     };
+
 
     popupBackgroundNew.addEventListener("click", (event) => {
         if (event.target === popupBackgroundNew) {
