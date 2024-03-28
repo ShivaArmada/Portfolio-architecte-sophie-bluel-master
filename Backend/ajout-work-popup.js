@@ -52,66 +52,70 @@ function afficherPopupNew() {
         let cadreDivNew = document.createElement("div");
         cadreDivNew.classList.add("cadre-div");
 
-        let inputFileNew = document.createElement("input");
-        inputFileNew.setAttribute("type", "file");
-        inputFileNew.setAttribute("id", "images_du_bien");
-        inputFileNew.setAttribute("accept", "image/png, image/jpeg");
-        inputFileNew.setAttribute("max-size", "4MB");
-        inputFileNew.classList.add("input-file");
-        inputFileNew.style.display = "none"; // Cacher l'input
-        inputFileNew.required = true; // Rendre l'input obligatoire
-        cadreDivNew.appendChild(inputFileNew);
+        // Create an input for the image
+        const imageInput = document.createElement("input");
+        imageInput.setAttribute("type", "file");
+        imageInput.setAttribute("id", "images_du_bien");
+        imageInput.setAttribute("accept", "image/png, image/jpeg");
+        imageInput.setAttribute("max-size", "4MB");
+        imageInput.classList.add("image-input");
+        imageInput.style.display = "none"; // Hide the input
+        imageInput.required = true; // Make the input mandatory
+        cadreDivNew.appendChild(imageInput);
 
-        // Ajouter un écouteur d'événements pour déclencher le clic sur l'input lorsque la div est cliquée
+        // Add an event listener to trigger the click on the input when the div is clicked
         cadreDivNew.addEventListener("click", function () {
-            inputFileNew.click();
+            imageInput.click();
         });
 
         GformNew.appendChild(cadreDivNew);
 
-        let imageUrl = ''; 
-        let imageFile = null; 
-        let imageElement = ''; // Déclarez imageElement ici pour l'utiliser plus tard
-        let imgInput = null; 
 
+        const FormPost = new FormData();
+        let imagePromise;
+        let imgInput;
+        let updateVisualisation = function () {
+            return new Promise((resolve, reject) => {
+                const preview_square = document.getElementsByClassName("cadre-div")[0];
+                imgInput = document.getElementById("images_du_bien");
 
-        function updateVisualisation() {
-            const preview_square = document.getElementsByClassName("cadre-div")[0];
-            const imgInput = document.getElementById("images_du_bien");
+                if (imgInput.files && imgInput.files[0]) {
+                    let imageFile = imgInput.files[0]; // Assign the file to imageFile
 
-            if (imgInput.files && imgInput.files[0]) {
-                imageFile = imgInput.files[0]; // Assignez le fichier à imageFile
+                    const reader = new FileReader();
 
+                    reader.onload = function (e) {
+                        imageUrl = e.target.result;
+                        const imageElement = `<img src="${imageUrl}" loading="lazy" class="imageElement" decoding="async" style="max-width:210px; max-height:170px;">`;
 
+                        preview_square.innerHTML = imageElement;
+                        resolve(imageFile); // Resolve the promise with imgInput.files[0]
+                    };
 
-                const reader = new FileReader();
+                    // Read the file as URL data
+                    reader.readAsDataURL(imageFile);
 
-                reader.onload = function (e) {
-                    imageUrl = e.target.result;
-                    const imageElement = `<img src="${imageUrl}" loading="lazy" class="imageElement" decoding="async" style="max-width:210px; max-height:170px;">`;
-                    
+              
+                } else {
+                    const imageElement = `<i class="fa-regular fa-circle-xmark"></i> style="font-size: 2rem; color: black;"`;
 
                     preview_square.innerHTML = imageElement;
-                    
-             
-
-                };
-
-                // Lire le fichier en tant que données URL
-                reader.readAsDataURL(imageFile);
-                console.log('formData :', imageFile);
-            } else {
-                const imageElement = `<i class="fa-regular fa-circle-xmark"></i> style="font-size: 2rem; color: black;"`;
-
-                preview_square.innerHTML = imageElement;
-                
-            }
+                    reject('No image file selected');
+                }
+            });
         }
-       
 
-        // Ajouter un écouteur d'événements à l'input pour appeler updateVisualisation lorsque l'utilisateur sélectionne un fichier
-        const inputFile = document.getElementsByClassName("input-file")[0];
-        inputFile.addEventListener("change", updateVisualisation);
+        // Add an event listener to the input to call updateVisualisation when the user selects a file
+        const imageInputListener = document.getElementsByClassName("image-input")[0];
+        imageInputListener.addEventListener("change", function () {
+            console.log('Image selected'); // Add this line
+            imagePromise = updateVisualisation();
+            imagePromise.then(imageFile => {
+                console.log('imageFile', imageFile);
+            });
+        });
+      
+
 
         let spanLogoNew = document.createElement("span");
         spanLogoNew.innerHTML = `<i class="fa-solid fa-image"></i>`;
@@ -132,15 +136,22 @@ function afficherPopupNew() {
 
         let inputTitleNew = document.createElement("input");
         inputTitleNew.setAttribute("type", "text");
-        inputTitleNew.setAttribute("id", "title-zone-ajout"); // Utilisez "title-zone-ajout" comme ID pour éviter toute confrontation
+        inputTitleNew.setAttribute("id", "title-zone-ajout"); // Use "title-zone-ajout" as ID to avoid any confrontation
         inputTitleNew.classList.add("input-reaction");
         divInputZone1.appendChild(inputTitleNew);
 
         let labelTitleNew = document.createElement("label");
         labelTitleNew.setAttribute("for", "title-zone-ajout");
-        labelTitleNew.textContent = "Titre" // Assurez-vous que l'attribut for correspond au nouvel ID de l'élément d'entrée
+        labelTitleNew.textContent = "Titre" // Make sure the for attribute matches the new ID of the input element
         divInputZone1.insertBefore(labelTitleNew, inputTitleNew);
 
+        let titlePromise = new Promise(resolve => {
+            inputTitleNew.addEventListener('change', function () {
+                title = this.value;
+                console.log('Title changed:', title); // Add this line
+                resolve(title); // Resolve the promise when the input changes
+            });
+        });
         GformNew.appendChild(divInputZone1);
 
         let divInputZone2 = document.createElement("div");
@@ -150,6 +161,15 @@ function afficherPopupNew() {
         selectCategoryNew.setAttribute("name", "category");
         selectCategoryNew.setAttribute("id", "category");
         selectCategoryNew.classList.add("input-reaction");
+
+        // Add event listener for 'change' event
+        let categoryPromise = new Promise(resolve => {
+            selectCategoryNew.addEventListener('change', function () {
+                categoryId = this.value;
+                console.log('Category changed:', categoryId);
+                resolve(categoryId); // Resolve the promise when the selection changes
+            });
+        });
         divInputZone2.appendChild(selectCategoryNew);
 
         let defaultOption = document.createElement("option");
@@ -203,124 +223,69 @@ function afficherPopupNew() {
         submitBtnNew.classList.add("submit-btn-new");
         GformNew.appendChild(submitBtnNew);
 
+
         submitBtnNewWrapper.appendChild(submitBtnNew);
         GformNew.appendChild(submitBtnNewWrapper);
 
-        // fonction à appelé après pour affiché le travail mis à jour
-        function pollWorks() {
-            // Appeler getWorks() immédiatement, puis à intervalles réguliers
-            getWorks().then(data => {
-                displaySelectedCategory(data);
-            });
 
-            intervalId = setInterval(() => {
-                getWorks().then(data => {
-                    displaySelectedCategory(data);
-                });
-            }, 5000); // 5000 millisecondes = 5 secondes
+        console.log('imagePromise', imagePromise); 
 
-            setTimeout(() => {
-                clearInterval(intervalId);
-            }, 6000); // 6000 millisecondes = 6 secondes
+        Promise.all([titlePromise, categoryPromise, imagePromise]).then(([title, categoryId, imageFile]) => {
+            let FormPost = new FormData();
+            FormPost.append('title', title);
+            FormPost.append('categoryId', categoryId);
+            FormPost.append('image', imageFile);
+            console.log('FormPost', FormPost);
 
-            // Ajouter l'écouteur d'événements à chaque élément de subBtnNewV
-            let subBtnNewV = document.querySelectorAll(".submit-btn-new");
-            subBtnNewV.forEach(element => {
-                element.addEventListener("click", function () {
-                    // Si un polling est déjà en cours, l'arrêter
-                    if (intervalId) {
-                        clearInterval(intervalId);
-                    }
+            GformNew.addEventListener("submit", async function (event) {
+                event.preventDefault(); // Empêche le comportement par défaut du navigateur lors de la soumission du formulaire
 
-                    // Commencer un nouveau polling
-                    pollWorks();
-                });
-            });
-        }
+                // Créer un objet FormData et y ajouter les valeurs
 
-        GformNew.addEventListener("submit", async function (event) {
-            event.preventDefault(); // Empêche le comportement par défaut du navigateur lors de la soumission du formulaire
-        
-            // Récupérer les valeurs des champs d'entrée
-            const title = document.getElementById('title-zone-ajout').value;
-            const categoryId = selectCategoryNew.value;
-        
-            // Fetch the image from the URL
-            const imageUrl = document.querySelector('.cadre-div img').src;
-        
-            fetch(imageUrl)
-                .then(response => response.blob())
-                .then(imageBlob => {
-                    // Créer un objet FormData et y ajouter les valeurs
-                    const formData = new FormData();
-                    formData.append('title', title);
-                    formData.append('categoryId', categoryId);
-                    formData.append('image', imageBlob, 'image.png'); // Ajoutez le fichier d'image
-        
-                    console.log('title', title);  
-                    console.log('categoryId', categoryId);
-                    console.log('imageURL :', imageUrl);
-        
-                    // Envoyer la requête fetch
-                    return fetch('http://localhost:5678/api/works', {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
-                            'Accept': 'multipart/form-data',
-                        },
-                        body: formData
+
+
+
+
+
+
+
+                // Envoyer la requête fetch
+                fetch('http://localhost:5678/api/works', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                    },
+                    body: FormPost
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('La requête a échoué avec le statut : ' + response.status);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log('Travail ajouté avec succès :', data);
+                    })
+                    .catch(error => {
+                        console.error(error);
                     });
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        // Select the input elements
-                        const inputs = document.querySelectorAll('input.input-reaction, select.input-reaction');
-        
-                        // Add the 'bad' class to each input element
-                        inputs.forEach(input => {
-                            input.classList.add('bad');
-                        });
-        
-                        throw new Error('La requête a échoué avec le statut : ' + response.status);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log('Travail ajouté avec succès :', data);
-                    pollWorks();                  
-                    cacherPopupNew();
-                })
-                .then(() => {
-                    // Reset the form
-                    GformNew.reset();
-                })
-                .then(() => {
-                    // Reset the visualisation
-                    updateVisualisation();
-                })
-                .then(data => {
-                    // Display the selected category
-                    displaySelectedCategory(data);
-                })
-                .catch(error => {
-                    console.error('Une erreur est survenue lors de la requête :', error.message);
-                    throw error;
-                });
+            });
         });
+    };
 
-        popupBackgroundNew.addEventListener("click", (event) => {
-            if (event.target === popupBackgroundNew) {
-                cacherPopupNew()
-            }
-        });
-    }
+    popupBackgroundNew.addEventListener("click", (event) => {
+        if (event.target === popupBackgroundNew) {
+            cacherPopupNew()
+        }
+    });
+
 
     popupBackgroundNew.classList.add("active");
+
+
+    function cacherPopupNew() {
+        let popupBackgroundNew = document.querySelector(".popupBackgroundNew")
+        popupBackgroundNew.classList.remove("active")
+    }
+
 }
-
-function cacherPopupNew() {
-    let popupBackgroundNew = document.querySelector(".popupBackgroundNew")
-    popupBackgroundNew.classList.remove("active")
-}
-
-
