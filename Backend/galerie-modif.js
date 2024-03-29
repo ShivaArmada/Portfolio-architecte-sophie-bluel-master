@@ -3,7 +3,7 @@
 
 if (sessionStorage.getItem('token') !== null) {
     // sessionStorage est disponible
-
+    // sécuritée de la page
     /**
      * Cette fonction initialise les écouteurs d'événements qui concernent 
      * l'affichage de la popup. 
@@ -19,15 +19,20 @@ if (sessionStorage.getItem('token') !== null) {
                 afficherPopup();
             });
         });
-    }
+    }// on initie le moyen d'écoute de l'événement
+
+    //pour affiché la popup
 
     function afficherPopup() {
+
+        //le popupBackground est la div qui contient la popup elle sera le fonds noir basse opacitée
         let popupBackground = document.querySelector(".popupBackground");
         if (!popupBackground) {
             popupBackground = document.createElement("div");
             popupBackground.classList.add("popupBackground");
             document.body.appendChild(popupBackground);
 
+            //il est le vrai corps de la popup et contiendra nos éléments
             let Gform = document.createElement("form");
             Gform.classList.add("Gform");
             popupBackground.appendChild(Gform);
@@ -43,7 +48,7 @@ if (sessionStorage.getItem('token') !== null) {
             modifTitle.classList.add("modif-title");
             Gform.appendChild(modifTitle);
 
-            // ici la galerie récupérer avec work
+            // ici la galerie récupérer avec work pour l'affiché dans la popup
             // URL de l'API
             const url = 'http://localhost:5678/api/works';
 
@@ -56,6 +61,7 @@ if (sessionStorage.getItem('token') !== null) {
                     galerie.classList.add("galerie");
 
                     // Parcourir les données et créer une div pour chaque image
+                    // Ajouter chaque div à la galerie = chaque objet pourra avoir une span pour supprimer l'image
                     data.forEach(item => {
                         let div = document.createElement("div");
                         div.classList.add("image-container");
@@ -72,25 +78,26 @@ if (sessionStorage.getItem('token') !== null) {
                         galerie.appendChild(div);
                     });
 
-                    
+                    //une fonction pour la transition entre les deux popup
+                    // voir quelle parmis celle là ou celle de ajout-work je garde
                     function transitionPopupOld() {
                         let ajout_Btn = document.querySelector(".ajout_Btn");
                         let ajout_Btn_Wrapper = document.querySelector(".ajout_Btn_Wrapper");
-                    
+
                         ajout_Btn.addEventListener("click", function (event) {
                             event.preventDefault();
-                            cacherPopup();  
-                            afficherPopupNew();                
+                            cacherPopup();
+                            afficherPopupNew();
                         });
-                    
+
                         ajout_Btn_Wrapper.addEventListener("click", function (event) {
                             event.preventDefault();
                             cacherPopup();
-                            afficherPopupNew(); 
+                            afficherPopupNew();
                         });
                     }
 
-                   
+
 
                     // Ajouter la galerie au formulaire
                     Gform.appendChild(galerie);
@@ -118,8 +125,8 @@ if (sessionStorage.getItem('token') !== null) {
                                         'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
                                     }
                                 })
-                                    .then(response =>console.log(response))
-                                    
+                                    .then(response => console.log(response))
+
                                     .catch(error => {
                                         console.error('Error:', error);
                                         prompt("Une erreur s'est produite lors de la suppression du travail. Veuillez réessayer.");
@@ -142,13 +149,13 @@ if (sessionStorage.getItem('token') !== null) {
                     ajout_Btn_Wrapper.appendChild(ajout_Btn);
                     Gform.appendChild(ajout_Btn_Wrapper);
                     transitionPopupOld();
-                  
+
                 })
                 .catch(error => console.error('Error:', error));
 
-                
-                
-                
+
+
+
 
             // On écoute le click sur la div "popupBackground"
             popupBackground.addEventListener("click", (event) => {
@@ -179,7 +186,7 @@ if (sessionStorage.getItem('token') !== null) {
 
 
 
-
+    //plutôt que de faire  un module, on a copié les fonctions de filtres-travaux.js (optimisable)
     // afficher les travaux par rapport aux données reçues de l'api et non à l'html via innerhtml
     function displaySelectedCategory(data) {
         document.getElementsByClassName("gallery")[0].innerHTML = "";
@@ -268,7 +275,7 @@ if (sessionStorage.getItem('token') !== null) {
 
         // Remove the token and userId from the browser's session storage
         sessionStorage.removeItem('token');
-        
+
         // Redirect to the login.html page
         window.location.href = 'login.html';
     }
@@ -281,7 +288,7 @@ if (sessionStorage.getItem('token') !== null) {
     getWorks().then(data => {
         displaySelectedCategory(data)
     });
-     
+
 
 } else {
     // sessionStorage n'est pas disponible

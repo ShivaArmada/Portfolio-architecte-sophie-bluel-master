@@ -1,5 +1,5 @@
 
-
+//pour l'affichage de la popup d'ajout de travail, on utilise une fonction de transition de popup
 function transitionPopup() {
     let ajout_Btn = document.querySelector(".ajout_Btn");
     let ajout_Btn_Wrapper = document.querySelector(".ajout_Btn_Wrapper");
@@ -17,6 +17,8 @@ function transitionPopup() {
     });
 }
 
+
+//tout le code sera contenue dans cette fonction qui affiche la popup d'ajout de travail qui contient le formulaire
 function afficherPopupNew() {
     let popupBackgroundNew = document.querySelector(".popupBackgroundNew");
     if (!popupBackgroundNew) {
@@ -24,17 +26,23 @@ function afficherPopupNew() {
         popupBackgroundNew.classList.add("popupBackgroundNew");
         document.body.appendChild(popupBackgroundNew);
 
+
+
+        // on crée un formulaire pour l'ajout de travail
+
         let GformNew = document.createElement("form");
         GformNew.classList.add("GformNew");
         popupBackgroundNew.appendChild(GformNew);
 
+
+        // on crée un bouton pour fermer la popup qui est le même que celui de la popup de modification
         let closeBtnNew = document.createElement("span");
         closeBtnNew.innerHTML = `<i class="fa-solid fa-xmark"></i>`;
         closeBtnNew.classList.add("close-icon");
         closeBtnNew.addEventListener("click", cacherPopupNew);
         GformNew.appendChild(closeBtnNew);
 
-
+        // on crée un bouton de retour qui permet de revenir à la popup principale de modification
         let returnBtn = document.createElement("span");
         returnBtn.innerHTML = `<i class="fa-solid fa-arrow-left"></i>`;
         returnBtn.classList.add("return-icon");
@@ -44,6 +52,7 @@ function afficherPopupNew() {
         });
         GformNew.appendChild(returnBtn);
 
+        //l'intérieur de notre formulaire
         let modifTitleNew = document.createElement("h3");
         modifTitleNew.textContent = "Ajout Photo";
         modifTitleNew.classList.add("modif-title");
@@ -63,6 +72,7 @@ function afficherPopupNew() {
         imageInput.required = true; // Make the input mandatory
         cadreDivNew.appendChild(imageInput);
 
+        //cette fonction est juste pour utilisé l'input file au dessus dans le code, sans pour autant voir le file
         // Add an event listener to trigger the click on the input when the div is clicked
         cadreDivNew.addEventListener("click", function () {
             imageInput.click();
@@ -73,7 +83,7 @@ function afficherPopupNew() {
 
 
 
-
+        //intérieur du cadre de l'input file
 
         let spanLogoNew = document.createElement("span");
         spanLogoNew.innerHTML = `<i class="fa-solid fa-image"></i>`;
@@ -88,6 +98,8 @@ function afficherPopupNew() {
         pFormatNew.innerText = "jpg, png : 4mo max";
         pFormatNew.classList.add("p-format");
         cadreDivNew.appendChild(pFormatNew);
+
+        //les deux inputs pour le titre et la catégorie
 
         let divInputZone1 = document.createElement("div");
         divInputZone1.classList.add("input-zone");
@@ -130,6 +142,7 @@ function afficherPopupNew() {
         });
         divInputZone2.appendChild(selectCategoryNew);
 
+        //on crée une option par défaut pour le select qui reste blank et désactivée (purement visuel + pour éviter les erreurs dans le choix)
         let defaultOption = document.createElement("option");
         defaultOption.textContent = ""; // Texte de l'option par défaut
         defaultOption.setAttribute("disabled", ""); // Désactive l'option par défaut
@@ -158,6 +171,10 @@ function afficherPopupNew() {
             })
             .then(data => {
                 // Create an option for each category
+
+                //on attribue en fonction de la requete, un name et un id à chaque option
+
+
                 data.forEach(item => {
                     let optionNew = document.createElement("option");
                     optionNew.text = item.name;
@@ -175,6 +192,7 @@ function afficherPopupNew() {
         let submitBtnNewWrapper = document.createElement("div");
         submitBtnNewWrapper.classList.add("sub_Wrapper");
 
+        //le fameux bouton input submit qui permet de valider le formulaire
         let submitBtnNew = document.createElement("input");
         submitBtnNew.setAttribute("type", "submit");
         submitBtnNew.value = "Valider";
@@ -186,8 +204,10 @@ function afficherPopupNew() {
         GformNew.appendChild(submitBtnNewWrapper);
 
 
-
+        //on aura besoin de ce formulaire pour envoyer les données du formulaire (on le remplis quand les promesses sont résolues)
         let FormPost = new FormData();
+
+        //pour la preview de l'image, on utilise une fonction qui permet de voir l'image avant de la télécharger (function e dans un nouveau reader)
 
         let imgInput;
         let updateVisualisation = function () {
@@ -246,19 +266,23 @@ function afficherPopupNew() {
 
         });
 
+        //le plus important, la fonction qui permet d'envoyer les données du formulaire
+
         GformNew.addEventListener("submit", async function (event) {
             event.preventDefault(); // Empêche le comportement par défaut du navigateur lors de la soumission du formulaire
 
-            // Créer un objet FormData et y ajouter les valeurs
+            // le FormData que l'on avait crée plus haut, on lui ajoute les données du formulaire qui reviennent des promises résolues
             const [title, categoryId] = await Promise.all([titlePromise, categoryPromise])
             FormPost.append('title', title);
             FormPost.append('category', categoryId);
 
+            // comme les promises sont résolues, tout dont l'image est aussi dans le file (evenement lié dans le temps) = on peut l'ajouter
             // Ajouter imgInput.files[0] à FormPost
             if (imgInput && imgInput.files && imgInput.files[0]) {
                 FormPost.append('image', imgInput.files[0]);
             }
 
+            //on sécurise en mettant les valeurs dans un console.log pour vérifier
             console.log(FormPost.get('title'));
             console.log(FormPost.get('categoryId'));
             console.log(FormPost.get('imageUrl'));
@@ -266,11 +290,13 @@ function afficherPopupNew() {
             console.log('imagefile', imgInput.files[0])
 
 
+            //maintenant que notre FormData est prêt, il faut demander à l'API de le recevoir
             // Envoyer la requête fetch
             fetch('http://localhost:5678/api/works', {
                 method: 'POST',
                 headers: {
                     'Authorization': 'Bearer ' + sessionStorage.getItem('token'),
+                    //pas besoin de lui dire que c'est du json, et que le formdata est du multi-part il le compile déjà automatiquement par le navigateur
                 },
                 body: FormPost
             })
@@ -282,6 +308,8 @@ function afficherPopupNew() {
                 })
                 .then(data => {
                     console.log('Travail ajouté avec succès :', data);
+                    //Multer compile ainsi les données envoyés, et renvoie le nouveau work automatiquement
+                    //grace à la réponse de l'API et au getwork + pollwork tjr actifs
                 })
                 .catch(error => {
                     console.error(error);
@@ -289,7 +317,7 @@ function afficherPopupNew() {
         });
     };
 
-
+    //pour cacher la popup c'est le meme principe que pour la popup de modification
     popupBackgroundNew.addEventListener("click", (event) => {
         if (event.target === popupBackgroundNew) {
             cacherPopupNew()
@@ -306,3 +334,5 @@ function afficherPopupNew() {
     }
 
 }
+
+//fin de la fonction pour affiché la nouvelle popup

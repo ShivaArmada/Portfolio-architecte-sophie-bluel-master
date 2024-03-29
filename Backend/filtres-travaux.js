@@ -22,6 +22,9 @@ fetch(url, options)
     })
     .then(data => {
         // Afficher les données dans la console
+        //on fais une base d'html pour travaux, comme dans le html fournis de base
+
+
         data.forEach(item => {
             document.getElementsByClassName("filterbar")[0].innerHTML += `
                 <button class="filter" data-category-id="${item.id}">
@@ -39,15 +42,21 @@ fetch(url, options)
         throw error;
     });
 
+
+//fonction pour écouter les boutons filtres créés dans le html
 function initButtonsListenener() {
     document.querySelectorAll(".filter").forEach(filter => {
         filter.addEventListener("click", () => {
             if (filter.dataset.categoryId != "0") {
+
                 // Exécuter la requête pour obtenir les données
                 getWorks().then(data => {
                     // Filtrer les données après avoir reçu la réponse de la requête
+                    //on filtre les données reçues par rapport à l'id de la catégorie
+                    // méthode filter() pour filtrer les données
+                    //les fichiers sont alors dans le tableau data mais filtrés
                     let filteredData = data.filter(item => item.categoryId == filter.dataset.categoryId);
-
+                    //on appel notre fonction qui affiche les travaux en précisant notre tableau filtré
                     displaySelectedCategory(filteredData)
                 });
             } else {
@@ -61,7 +70,7 @@ function initButtonsListenener() {
 }
 
 //afficher les travaux, par rapport aux données reçues de l'api et non à l'html via innerhtml
-
+//on utilise une boucle pour afficher les travaux
 function displaySelectedCategory(data) {
     document.getElementsByClassName("gallery")[0].innerHTML = "";
 
@@ -74,7 +83,7 @@ function displaySelectedCategory(data) {
                 `;
     })
 }
-
+//fonction pour obtenir les travaux totaux
 function getWorks() {
     // URL à utiliser pour la requête GET travaux
     const url = 'http://localhost:5678/api/works';
@@ -106,6 +115,8 @@ function getWorks() {
         });
 }
 
+//on appelle la fonction pour obtenir les travaux totaux then on affiche les travaux de la catégorie choisie
+//a defaut on affiche tous les travaux
 getWorks().then(data => {
     displaySelectedCategory(data)
 })
