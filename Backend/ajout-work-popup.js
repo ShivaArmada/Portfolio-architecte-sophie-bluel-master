@@ -252,24 +252,18 @@ function afficherPopupNew() {
             // Créer un objet FormData et y ajouter les valeurs
             const [title, categoryId] = await Promise.all([titlePromise, categoryPromise])
             FormPost.append('title', title);
-            FormPost.append('categoryId', categoryId);
+            FormPost.append('category', categoryId);
 
             // Ajouter imgInput.files[0] à FormPost
             if (imgInput && imgInput.files && imgInput.files[0]) {
-                FormPost.append('imageUrl', imgInput.files[0]);
+                FormPost.append('image', imgInput.files[0]);
             }
 
             console.log(FormPost.get('title'));
             console.log(FormPost.get('categoryId'));
             console.log(FormPost.get('imageUrl'));
 
-            console.log('image du bien id = ', document.getElementById("images_du_bien").files[0]);
-            let imageElement = document.querySelector(".imageElement");
-            if (imageElement) {
-                console.log('src de imageElement est', imageElement.src);
-            } else {
-                console.log('imageElement n\'existe pas');
-            }
+            console.log('imagefile', imgInput.files[0])
 
 
             // Envoyer la requête fetch
