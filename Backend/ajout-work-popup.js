@@ -254,9 +254,9 @@ function afficherPopupNew() {
             FormPost.append('title', title);
             FormPost.append('categoryId', categoryId);
 
-            // Ajouter imageInputListener.files[0] à FormPost
-            if (imageInputListener && imageInputListener.files && imageInputListener.files[0]) {
-                FormPost.append('imageUrl', imageInputListener.files[0]);
+            // Ajouter imgInput.files[0] à FormPost
+            if (imgInput && imgInput.files && imgInput.files[0]) {
+                FormPost.append('imageUrl', imgInput.files[0]);
             }
 
             console.log(FormPost.get('title'));
