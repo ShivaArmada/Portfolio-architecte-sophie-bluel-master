@@ -189,7 +189,7 @@ function afficherPopupNew() {
 
         let FormPost = new FormData();
 
-let imgInput;
+        let imgInput;
         let updateVisualisation = function () {
             const preview_square = document.getElementsByClassName("cadre-div")[0];
             imgInput = document.getElementById("images_du_bien");
@@ -202,9 +202,28 @@ let imgInput;
                 reader.onload = function (e) {
                     imageUrl = e.target.result;
 
-                    const imageElement = `<img src="${imageUrl}" loading="lazy" class="imageElement" decoding="async" style="max-width:210px; max-height:170px;">`;
+                    // Create a new img element
+                    const imageElement = document.createElement("img");
+                    imageElement.src = imageUrl;
+                    imageElement.loading = "lazy";
+                    imageElement.className = "imageElement";
+                    imageElement.decoding = "async";
+                    imageElement.style.maxWidth = "210px";
+                    imageElement.style.maxHeight = "170px";
 
-                    preview_square.innerHTML = imageElement;
+                    // Append the imageElement to preview_square
+                    preview_square.appendChild(imageElement);
+
+                    // Hide the spanLogoNew, pAddPhotoNew, and pFormatNew
+                    let spanLogoNew = document.querySelector(".fa-solid.fa-image");
+                    if (spanLogoNew) spanLogoNew.style.display = 'none';
+
+                    let pAddPhotoNew = document.querySelector(".p-add-photo");
+                    if (pAddPhotoNew) pAddPhotoNew.style.display = 'none';
+
+                    let pFormatNew = document.querySelector(".p-format");
+                    if (pFormatNew) pFormatNew.style.display = 'none';
+
                 };
 
                 // Read the file as URL data
@@ -235,14 +254,22 @@ let imgInput;
             FormPost.append('title', title);
             FormPost.append('categoryId', categoryId);
 
-     // Ajouter imageInputListener.files[0] à FormPost
-     if (imageInputListener && imageInputListener.files && imageInputListener.files[0]) {
-        FormPost.append('imageUrl', imageInputListener.files[0]);
-    }
+            // Ajouter imageInputListener.files[0] à FormPost
+            if (imageInputListener && imageInputListener.files && imageInputListener.files[0]) {
+                FormPost.append('imageUrl', imageInputListener.files[0]);
+            }
 
             console.log(FormPost.get('title'));
             console.log(FormPost.get('categoryId'));
             console.log(FormPost.get('imageUrl'));
+
+            console.log('image du bien id = ', document.getElementById("images_du_bien").files[0]);
+            let imageElement = document.querySelector(".imageElement");
+            if (imageElement) {
+                console.log('src de imageElement est', imageElement.src);
+            } else {
+                console.log('imageElement n\'existe pas');
+            }
 
 
             // Envoyer la requête fetch
