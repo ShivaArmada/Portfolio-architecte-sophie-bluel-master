@@ -24,7 +24,7 @@ fetch(url, options)
         // Afficher les données dans la console
         //on fais une base d'html pour travaux, comme dans le html fournis de base
 
-
+        //chaque bouton filtre est créé avec un id de catégorie en suivant le shémas de l'api
         data.forEach(item => {
             document.getElementsByClassName("filterbar")[0].innerHTML += `
                 <button class="filter" data-category-id="${item.id}">
