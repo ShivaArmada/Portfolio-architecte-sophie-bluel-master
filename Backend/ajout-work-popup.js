@@ -1,22 +1,4 @@
 
-//pour l'affichage de la popup d'ajout de travail, on utilise une fonction de transition de popup
-function transitionPopup() {
-    let ajout_Btn = document.querySelector(".ajout_Btn");
-    let ajout_Btn_Wrapper = document.querySelector(".ajout_Btn_Wrapper");
-
-    ajout_Btn.addEventListener("click", function (event) {
-        event.preventDefault();
-        cacherPopup();
-        afficherPopupNew();
-    });
-
-    ajout_Btn_Wrapper.addEventListener("click", function (event) {
-        event.preventDefault();
-        cacherPopup();
-        afficherPopupNew();
-    });
-}
-
 
 //tout le code sera contenue dans cette fonction qui affiche la popup d'ajout de travail qui contient le formulaire
 function afficherPopupNew() {
