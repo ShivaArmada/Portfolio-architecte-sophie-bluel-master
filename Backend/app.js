@@ -1,5 +1,5 @@
 
-console.log("Test2");
+
 
 const express = require('express');
 const path = require('path');
@@ -29,4 +29,3 @@ app.use('/api/works', worksRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 module.exports = app;
 
-console.log("Test1");

@@ -10,6 +10,12 @@ async function loginAndStoreCookies(email, password) {
   }).then(response => {
     if (!response.ok) {
 
+      //dans le cadre où la personne écris n'importe quoi, on lui indique qu'il écris n'importe quoi
+      const inputElements = document.querySelectorAll('#form-login input');
+      inputElements.forEach(element => {
+        element.classList.add('bad');
+      });
+
       // Differentiate between authentication error and server error
       if (response.status === 401) {
         throw new Error('Authentication failed: Invalid email or password');
@@ -44,12 +50,8 @@ document.getElementById('input-log-submit').addEventListener('click', async (eve
 
 
   } catch (error) {
-    //dans le cadre où la personne écris n'importe quoi, on lui indique qu'il écris n'importe quoi
+    throw new Error('la fonction loginAndStoreCookies a échoué avec l\'erreur : ' + error.message);
 
-    // Add the 'bad' class to the 'input-reaction' element
-    const inputElements = document.querySelectorAll('#form-login input');
-    inputElements.forEach(element => {
-      element.classList.add('bad');
-    });
+
   }
 });

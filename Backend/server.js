@@ -1,5 +1,5 @@
 
-console.log("Test3");
+
 
 const http = require('http');
 const app = require('./app');
@@ -50,4 +50,3 @@ server.on('listening', () => {
 server.listen(port);
 
 
-console.log("Test4")
