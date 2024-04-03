@@ -187,11 +187,11 @@ if (sessionStorage.getItem('token') !== null) {
 
 
 
-    
 
 
-    
-//on reprends les fonctions importées de filtres-travaux.js pour affiché les travaux
+
+
+    //on reprends les fonctions importées de filtres-travaux.js pour affiché les travaux
     getWorks().then(data => {
         displaySelectedCategory(data)
     })
@@ -244,7 +244,7 @@ if (sessionStorage.getItem('token') !== null) {
 
 
     initAddEventListenerPopup();
-    
+
 
 
 } else {

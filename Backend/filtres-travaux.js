@@ -122,5 +122,5 @@ getWorks().then(data => {
 })
 //on exporte les fonctions pour les utiliser dans le fichier galerie modif afin d'affiché les travaux une fois connecté
 //les travaux par défauts sont tous présents = utilisables + on pourrait ajouté les boutons filtres dans connected si on voulais
-export { getWorks, displaySelectedCategory};
+export { getWorks, displaySelectedCategory };
 

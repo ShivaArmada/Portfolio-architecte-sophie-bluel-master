@@ -29,7 +29,7 @@ async function loginAndStoreCookies(email, password) {
     //maintenant que l'on a nos email et password en json, qu'on la envoyé au serveur
     //on peut récupérer le token qu'il return puis le stocker dans le session storage
   }).then(data => {
-    
+
     // Store the cookies in the browser's session storage
     sessionStorage.setItem('token', data.token);
     //enfin on redirige l'utilisateur vers la page connected.html qui est sécurisée sans le token enregistré
