@@ -100,7 +100,7 @@ function afficherPopupNew() {
         let titlePromise = new Promise(resolve => {
             inputTitleNew.addEventListener('change', function () {
                 title = this.value;
-                console.log('Title changed:', title); // Add this line
+
                 resolve(title); // Resolve the promise when the input changes
             });
         });
@@ -118,7 +118,7 @@ function afficherPopupNew() {
         let categoryPromise = new Promise(resolve => {
             selectCategoryNew.addEventListener('change', function () {
                 categoryId = this.value;
-                console.log('Category changed:', categoryId);
+
                 resolve(categoryId); // Resolve the promise when the selection changes
             });
         });
@@ -264,12 +264,7 @@ function afficherPopupNew() {
                 FormPost.append('image', imgInput.files[0]);
             }
 
-            //on sécurise en mettant les valeurs dans un console.log pour vérifier
-            console.log(FormPost.get('title'));
-            console.log(FormPost.get('categoryId'));
-            console.log(FormPost.get('imageUrl'));
 
-            console.log('imagefile', imgInput.files[0])
 
 
             //maintenant que notre FormData est prêt, il faut demander à l'API de le recevoir
@@ -289,7 +284,7 @@ function afficherPopupNew() {
                     return response.json();
                 })
                 .then(data => {
-                    console.log('Travail ajouté avec succès :', data);
+                    alert('Travail ajouté avec succès :', data);
                     //Multer compile ainsi les données envoyés, et renvoie le nouveau work automatiquement
                     //grace à la réponse de l'API et au getwork + pollwork tjr actifs
                 })

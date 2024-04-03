@@ -1,4 +1,4 @@
-
+import { getWorks, displaySelectedCategory } from './filtres-travaux.js';
 
 
 if (sessionStorage.getItem('token') !== null) {
@@ -126,13 +126,14 @@ if (sessionStorage.getItem('token') !== null) {
                                     }
                                 })
                                     .then(response => console.log(response))
+                                    .then(() => alert("Le travail a été supprimé avec succès."))
 
                                     .catch(error => {
                                         console.error('Error:', error);
-                                        prompt("Une erreur s'est produite lors de la suppression du travail. Veuillez réessayer.");
+                                        alert("Une erreur s'est produite lors de la suppression du travail. Veuillez réessayer.");
                                     });
                             } else {
-                                console.log("Vous n'avez pas l'autorisation de supprimer ce travail.");
+                                alert("Vous n'avez pas l'autorisation de supprimer ce travail.");
                             }
                         });
                     });
@@ -186,53 +187,11 @@ if (sessionStorage.getItem('token') !== null) {
 
 
 
-    //plutôt que de faire  un module, on a copié les fonctions de filtres-travaux.js (optimisable)
-    // afficher les travaux par rapport aux données reçues de l'api et non à l'html via innerhtml
-    function displaySelectedCategory(data) {
-        document.getElementsByClassName("gallery")[0].innerHTML = "";
+    
 
-        data.forEach(item => {
-            document.getElementsByClassName("gallery")[0].innerHTML += `
-                    <figure>
-                        <img src="${item.imageUrl}" alt="${item.title}">
-                        <figcaption>${item.title}</figcaption>
-                    </figure>
-                    `;
-        })
-    }
-    // fonction copiée de filtres-travaux.js comme l'import ne marche pas
 
-    function getWorks() {
-        // URL à utiliser pour la requête GET travaux
-        url = 'http://localhost:5678/api/works';
-
-        // Options de la requête GET
-        const options = {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json'
-            }
-        };
-
-        // Retourner la promesse de la réponse de la requête
-        return fetch(url, options)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('La requête a échoué avec le statut : ' + response.status);
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Afficher les données dans la console
-                return data;
-            })
-            .catch(error => {
-                // En cas d'erreur, afficher un message d'erreur dans la console et rejeter la promesse
-                console.error('Une erreur est survenue lors de la requête :', error.message);
-                throw error;
-            });
-    }
-
+    
+//on reprends les fonctions importées de filtres-travaux.js pour affiché les travaux
     getWorks().then(data => {
         displaySelectedCategory(data)
     })
@@ -285,9 +244,7 @@ if (sessionStorage.getItem('token') !== null) {
 
 
     initAddEventListenerPopup();
-    getWorks().then(data => {
-        displaySelectedCategory(data)
-    });
+    
 
 
 } else {
